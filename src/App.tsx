@@ -1,4 +1,3 @@
-//import { useState } from 'react'
 import { Grid } from '@mui/material'
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
@@ -9,11 +8,13 @@ import IndicatorUI from './components/IndicatorUI';
 import useFetchData from './functions/useFetchData';
 import TableUI from './components/TableUI';
 import ChartUI from './components/ChartUI';
+import { useState } from 'react';
 
 import './App.css'
 
 function App() {
-  const dataFetcherOutput = useFetchData();
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const dataFetcherOutput = useFetchData(selectedOption);
 
   return (
 
@@ -29,7 +30,9 @@ function App() {
          </Grid>
 
          {/* Selector */}
-         <Grid size={{xs: 12, md: 3}} style= {{backgroundColor: "#FFFFFF", borderRadius: "4px"}}><SelectorUI/></Grid>
+         <Grid size={{xs: 12, md: 3}} style= {{backgroundColor: "#FFFFFF", borderRadius: "4px"}}>
+            <SelectorUI onOptionSelect={setSelectedOption} />
+        </Grid>
 
          {/* Indicadores */}
           <Grid container size={{ xs: 12, md: 9}}>
@@ -74,8 +77,8 @@ function App() {
          <Grid size={{xs: 12, md: 6}} sx={{ display: { xs: "none", md: "block"} }} style= {{backgroundColor: "#FFFF"}}>
             {dataFetcherOutput.data &&
                 (<ChartUI
-                    arrValues1name= {"Temperatura"}
-                    arrValues2name= {"Velocidad de Viento"}
+                    arrValues1name= {"Temperatura [°C]"}
+                    arrValues2name= {"Velocidad de Viento [km/h]"}
                     arrLabelsname= {"Hora"}
                     arrValues1= {dataFetcherOutput.data.hourly.temperature_2m.slice(0, 20)}
                     arrValues2= {dataFetcherOutput.data.hourly.wind_speed_10m.slice(0, 20)}
